@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Builder
+//@Builder
 //@Data
 //@Value
 public class Product {
@@ -23,6 +23,9 @@ public class Product {
     private Material material;
     private BigDecimal price;
     private String url;
+
+    public Product() {
+    }
 
     public int getId() {
         return id;

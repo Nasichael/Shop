@@ -28,7 +28,7 @@ public class RepositoryTest {
 
     @Before
     public void setup() {
-        repository = new Repository(jdbcTemplate);
+     //   repository = new Repository(jdbcTemplate);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class RepositoryTest {
         when(jdbcTemplate.queryForList("", Product.class)).thenReturn(products);
 
         //when
-        List<Product> returnedProducts = repository.search(searchedLetter);
+      ///  List<Product> returnedProducts = repository.search(searchedLetter);
 
         //then
 
@@ -53,7 +53,8 @@ public class RepositoryTest {
 
     private List<Product> createProducts() {
         List<Product> products = new ArrayList<>();
-        Product prodcut = new Product(3, "dress", null, null, null, null, BigDecimal.ONE, "");
+       // Product prodcut = new Product(3, "dress", null, null, null, null, BigDecimal.ONE, "");
+        Product prodcut = new Product();
         products.add(prodcut);
         return products;
     }
