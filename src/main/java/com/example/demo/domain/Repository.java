@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,32 +21,39 @@ public class Repository {
 
     public List<Product> search(String j) {
         //   final List<Map<String, Object>> maps = jdbcTemplate.queryForList("");
-        final List<Product> products1 = jdbcTemplate.queryForList("select * from Product", Product.class);
 
-        return new ArrayList<>();
-    }
+        // final List<Product> products1 = jdbcTemplate.queryForList("select * from Product", Product.class);
+        //  final List<Product> products1 =
+        jdbcTemplate.queryForRowSet("select * from Product");
 
-    /*try {
-        //return jdbcTemplate.queryForObject("select * from Product where id=?", new Object[]{id},new ProductMapper());
-        return jdbcTemplate.query("select * from Product where id=?", new ResultSetExtractor<Optional<Product>>() {
+        // final List<Product> query = jdbcTemplate.query("select * from Product", new ProductListMapper());
+        // return new ArrayList<>();
+
+
+         /*jdbcTemplate.query("select * from Product", new ResultSetExtractor<Optional<Product>>() {
 
             @Override
             public Optional<Product> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return Optional.empty();
             }
-        })
-    } catch () (EmptyResultDataAccessException e){
-        return null;
-    }*/
+        });*/
+
+        return new ArrayList<>();
+    }
 
 
     public Optional<Product> getOne(int id) {
 
+        final SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select * from Product where id=?", id);
+        if (!sqlRowSet.next()) {
+            return Optional.empty();
+        }
 
-        return jdbcTemplate.queryForObject(
-                "select * from Product where id=?",
-                new Object[]{id},
-                new ProductMapper());
+        Product entity = new Product();
+        entity.setId(sqlRowSet.getInt("id"));
+        entity.setName(sqlRowSet.getString("name"));
+
+        return Optional.of(entity);
     }
 
     class ProductMapper implements RowMapper<Optional<Product>> {
@@ -58,6 +66,22 @@ public class Repository {
             entity.setName(rs.getString("name"));
             return Optional.of(entity);
         }
+
+
+    }
+
+
+    class ProductListMapper implements RowMapper<Product> {
+
+        @Override
+        public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            Product entity = new Product();
+            entity.setId(rs.getInt("id"));
+            entity.setName(rs.getString("name"));
+            return entity;
+        }
+
 
     }
 
