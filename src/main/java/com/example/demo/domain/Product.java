@@ -24,6 +24,20 @@ public class Product {
     private BigDecimal price;
     private String url;
 
+    public Product() {
+    }
+
+    public Product(int id, String name, Category category, ShoeSize shoeSize, ClotheSize clotheSize, Material material, BigDecimal price, String url) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.shoeSize = shoeSize;
+        this.clotheSize = clotheSize;
+        this.material = material;
+        this.price = price;
+        this.url = url;
+    }
+
     public int getId() {
         return id;
     }
