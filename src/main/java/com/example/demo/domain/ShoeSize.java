@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @Builder
-
 public class ShoeSize {
 
     private int id;

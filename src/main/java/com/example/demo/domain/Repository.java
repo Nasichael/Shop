@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Repository
 public class Repository {
@@ -19,26 +21,25 @@ public class Repository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Product> search(String j) {
-        //   final List<Map<String, Object>> maps = jdbcTemplate.queryForList("");
+    public List<Product> search(String keyWord) {
 
-        // final List<Product> products1 = jdbcTemplate.queryForList("select * from Product", Product.class);
-        //  final List<Product> products1 =
-        jdbcTemplate.queryForRowSet("select * from Product");
+        //final SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT id, name FROM product WHERE name LIKE 'j%'");
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE 'j%'");
 
-        // final List<Product> query = jdbcTemplate.query("select * from Product", new ProductListMapper());
-        // return new ArrayList<>();
+        return maps.stream()
+                .map(row -> product(row))
+                .collect(Collectors.toList());
 
+      /*  return jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE '{0}'",
+                new String[]{keyWord}, Product.class);*/
+    }
 
-         /*jdbcTemplate.query("select * from Product", new ResultSetExtractor<Optional<Product>>() {
+    private Product product(Map<String, Object> row) {
 
-            @Override
-            public Optional<Product> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                return Optional.empty();
-            }
-        });*/
-
-        return new ArrayList<>();
+        return Product.builder()
+                .id((Integer) row.get("id"))
+                .name((String) row.get("name"))
+                .build();
     }
 
 
@@ -49,9 +50,13 @@ public class Repository {
             return Optional.empty();
         }
 
-        Product entity = new Product();
-        entity.setId(sqlRowSet.getInt("id"));
-        entity.setName(sqlRowSet.getString("name"));
+        final Product entity = Product.builder()
+                .id(sqlRowSet.getInt("id"))
+                .name(sqlRowSet.getString("name"))
+                .build();
+
+    /*    entity.setId(sqlRowSet.getInt("id"));
+        entity.setName(sqlRowSet.getString("name"));*/
 
         return Optional.of(entity);
     }
@@ -61,13 +66,13 @@ public class Repository {
         @Override
         public Optional<Product> mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            Product entity = new Product();
-            entity.setId(rs.getInt("id"));
-            entity.setName(rs.getString("name"));
+            Product entity = Product.builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build();
+
             return Optional.of(entity);
         }
-
-
     }
 
 
@@ -76,10 +81,10 @@ public class Repository {
         @Override
         public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            Product entity = new Product();
-            entity.setId(rs.getInt("id"));
-            entity.setName(rs.getString("name"));
-            return entity;
+            return Product.builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .build();
         }
 
 

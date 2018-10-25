@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import org.assertj.core.data.Index;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,32 +65,35 @@ public class RepositoryTest {
     @Test
     public void shouldFindAllProductsContainingJ() {
 
-
         //given
         final String searchedLetter = "j";
-
-        // dress jacket jumper belt
-        // when(jdbcTemplate.queryForList("")).thenReturn(new ArrayList<>());
-        List<Product> products = createProducts();
-        when(jdbcTemplate.queryForList("", Product.class)).thenReturn(products);
-
+//stworzyc produkty jacket i jumper
         //when
         List<Product> returnedProducts = repository.search(searchedLetter);
 
         //then
-
-
+        Product jumper= Product.builder().build();
+        Product jacket = Product.builder().build();
+        assertThat(returnedProducts).hasSize(2)
+        .contains(jumper, jacket);
     }
 
     private List<Product> createProducts() {
         List<Product> products = new ArrayList<>();
-        Product prodcut = new Product();//3, "dress", null, null, null, null, BigDecimal.ONE, "");
-        products.add(prodcut);
+        Product product = Product.builder().build(); //zamiast konstruktora czyli new Product();
+
+        //3, "dress", null, null, null, null, BigDecimal.ONE, "");
+        products.add(product);
         return products;
     }
 
     public void shouldNotFindProductContainingC() {
 
+    }
+
+    @Test
+    public void testLombok() {
+        Category.builder().build();
     }
 
 }
