@@ -72,10 +72,19 @@ public class RepositoryTest {
         List<Product> returnedProducts = repository.search(searchedLetter);
 
         //then
-        Product jumper= Product.builder().build();
-        Product jacket = Product.builder().build();
+        Product jumper = Product.builder()
+                .name("jumper")
+                .id(2)
+                .build();
+
+
+        Product jacket = Product.builder()
+                .name("jacket")
+                .id(1)
+                .build();
+
         assertThat(returnedProducts).hasSize(2)
-        .contains(jumper, jacket);
+                .contains(jumper, jacket);
     }
 
     private List<Product> createProducts() {
@@ -87,7 +96,18 @@ public class RepositoryTest {
         return products;
     }
 
-    public void shouldNotFindProductContainingC() {
+    @Test
+    public void shouldNotFindProductContainingZ() {
+
+        //given
+        final String searchedLetter = "z";
+
+        //when
+        List<Product> returnedProducts = repository.search(searchedLetter);
+
+        //then
+
+        assertThat(returnedProducts).isEmpty();
 
     }
 

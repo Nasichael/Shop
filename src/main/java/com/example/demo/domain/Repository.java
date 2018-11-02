@@ -24,7 +24,8 @@ public class Repository {
     public List<Product> search(String keyWord) {
 
         //final SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT id, name FROM product WHERE name LIKE 'j%'");
-        final List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE 'j%'");
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE '"+keyWord+"%'");
+
 
         return maps.stream()
                 .map(row -> product(row))
@@ -35,7 +36,6 @@ public class Repository {
     }
 
     private Product product(Map<String, Object> row) {
-
         return Product.builder()
                 .id((Integer) row.get("id"))
                 .name((String) row.get("name"))
