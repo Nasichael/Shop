@@ -6,7 +6,6 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,8 +23,7 @@ public class Repository {
     public List<Product> search(String keyWord) {
 
         //final SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT id, name FROM product WHERE name LIKE 'j%'");
-        final List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE '"+keyWord+"%'");
-
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT id, name FROM product WHERE name LIKE '" + keyWord + "%'");
 
         return maps.stream()
                 .map(row -> product(row))
@@ -35,7 +33,24 @@ public class Repository {
                 new String[]{keyWord}, Product.class);*/
     }
 
-    private Product product(Map<String, Object> row) {
+    public List<Product> search2(String keyword) {
+        final List<Product> query = jdbcTemplate.query("SELECT id, name FROM product WHERE name LIKE", new Object[]{keyword}, new RowMapper<Product>() {
+
+            @Override
+            public Product mapRow(ResultSet resultSet, int row) throws SQLException {
+                Product entity = Product.builder()
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("name"))
+                        .build();
+
+                return entity;
+            }
+        });
+
+        return query;
+    }
+
+    public Product product(Map<String, Object> row) {
         return Product.builder()
                 .id((Integer) row.get("id"))
                 .name((String) row.get("name"))
@@ -59,6 +74,16 @@ public class Repository {
         entity.setName(sqlRowSet.getString("name"));*/
 
         return Optional.of(entity);
+    }
+
+    public List<Product> getAll() {
+
+        final List<Map<String, Object>> query = jdbcTemplate.queryForList("SELECT * FROM Product");
+
+        return query.stream()
+                .map(row -> product(row))
+                .collect(Collectors.toList());
+
     }
 
     class ProductMapper implements RowMapper<Optional<Product>> {
@@ -86,8 +111,5 @@ public class Repository {
                     .name(rs.getString("name"))
                     .build();
         }
-
-
     }
-
 }

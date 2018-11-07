@@ -21,11 +21,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RepositoryTest {
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -69,7 +71,7 @@ public class RepositoryTest {
         final String searchedLetter = "j";
 //stworzyc produkty jacket i jumper
         //when
-        List<Product> returnedProducts = repository.search(searchedLetter);
+        List<Product> returnedProducts = repository.search2(searchedLetter);
 
         //then
         Product jumper = Product.builder()
@@ -116,4 +118,50 @@ public class RepositoryTest {
         Category.builder().build();
     }
 
+    @Test
+    public void shouldFindAllItems() {
+
+        //given
+
+        final int size = 3;
+
+        //when
+
+        List<Product> list = repository.getAll();
+
+        //then
+        assertThat(list.size()).isEqualTo(size);
+
+    }
+
+    @Test
+    public void shouldFindById2() {
+
+        //given
+        final int ID = 2;
+        Product jumper = Product.builder()
+                .id(2)
+                .name("jumper")
+                .build();
+
+        //when
+        Optional<Product> item = repository.getOne(ID);
+
+        //then
+        assertThat(item.equals(jumper));
+    }
+
+    @Test
+    public void shouldFindNullWithId5() {
+
+        //given
+        final int ID = 5;
+
+        //when
+        Optional<Product> product = repository.getOne(ID);
+
+        //then
+       // assertThat(product.equals(Optional.empty()));   //dlaczego to nie dziala???
+        assertEquals(Optional.empty(), product);
+    }
 }
