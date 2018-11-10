@@ -71,7 +71,7 @@ public class RepositoryTest {
         final String searchedLetter = "j";
 //stworzyc produkty jacket i jumper
         //when
-        List<Product> returnedProducts = repository.search2(searchedLetter);
+        List<Product> returnedProducts = repository.search(searchedLetter);
 
         //then
         Product jumper = Product.builder()
@@ -148,7 +148,8 @@ public class RepositoryTest {
         Optional<Product> item = repository.getOne(ID);
 
         //then
-        assertThat(item.equals(jumper));
+        assertThat(item).isPresent();
+        assertThat(item.get()).isEqualTo(jumper);
     }
 
     @Test
@@ -161,7 +162,87 @@ public class RepositoryTest {
         Optional<Product> product = repository.getOne(ID);
 
         //then
-       // assertThat(product.equals(Optional.empty()));   //dlaczego to nie dziala???
-        assertEquals(Optional.empty(), product);
+        assertThat(product).isEmpty();
+
+        // assertThat(product.equals(Optional.empty()));   //dlaczego to nie dziala???
+        //assertEquals(Optional.empty(), product);
+    }
+
+    @Test
+    public void shouldAddJumperToTheBasket() {
+
+        //given
+        Basket basket = new Basket();
+        Product jumper = Product.builder()
+                .id(2)
+                .name("jumper")
+                .build();
+
+        Product dress = Product.builder()
+                .id(0)
+                .name("dress")
+                .price(BigDecimal.valueOf(150))
+                .build();
+
+        //when
+        basket.addProductToBasket(jumper);
+        basket.addProductToBasket(dress);
+
+        //then
+        assertThat(basket.listOfProducts.size()).isEqualTo(2);
+        assertThat(basket.listOfProducts.contains(jumper)).isTrue();
+
+    }
+
+
+    @Test
+    public void shouldviewBasket() {
+
+        //given
+        Product jumper = Product.builder()
+                .id(2)
+                .name("jumper")
+                .build();
+
+        Basket basket = new Basket();
+        basket.addProductToBasket(jumper);
+
+        List<Product> listOfProducts = new ArrayList<>();
+        listOfProducts.add(jumper);
+
+        //when
+        List<Product> listOfProducts2 = basket.viewBasket();
+
+        //then
+        assertThat(listOfProducts2).isEqualTo(listOfProducts);
+    }
+
+    @Test
+    public void shouldCalculateTotalPrice() {
+
+        //given
+        Basket basket = new Basket();
+        Product jumper = Product.builder()
+                .id(2)
+                .name("jumper")
+                .price(BigDecimal.valueOf(300))
+                .build();
+
+        Product dress = Product.builder()
+                .id(0)
+                .name("dress")
+                .price(BigDecimal.valueOf(150))
+                .build();
+
+        List<Product> listOfProducts = new ArrayList<>();
+        listOfProducts.add(jumper);
+        listOfProducts.add(jumper);
+        listOfProducts.add(dress);
+
+        //when
+        BigDecimal totalPrice = basket.calculateTotalPrice(listOfProducts);
+
+        //then
+        assertThat(totalPrice).isEqualTo(BigDecimal.valueOf(750));
     }
 }

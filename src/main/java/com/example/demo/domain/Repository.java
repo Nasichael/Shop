@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -33,22 +34,8 @@ public class Repository {
                 new String[]{keyWord}, Product.class);*/
     }
 
-    public List<Product> search2(String keyword) {
-        final List<Product> query = jdbcTemplate.query("SELECT id, name FROM product WHERE name LIKE", new Object[]{keyword}, new RowMapper<Product>() {
 
-            @Override
-            public Product mapRow(ResultSet resultSet, int row) throws SQLException {
-                Product entity = Product.builder()
-                        .id(resultSet.getInt("id"))
-                        .name(resultSet.getString("name"))
-                        .build();
 
-                return entity;
-            }
-        });
-
-        return query;
-    }
 
     public Product product(Map<String, Object> row) {
         return Product.builder()
@@ -85,21 +72,6 @@ public class Repository {
                 .collect(Collectors.toList());
 
     }
-
-    class ProductMapper implements RowMapper<Optional<Product>> {
-
-        @Override
-        public Optional<Product> mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-            Product entity = Product.builder()
-                    .id(rs.getInt("id"))
-                    .name(rs.getString("name"))
-                    .build();
-
-            return Optional.of(entity);
-        }
-    }
-
 
     class ProductListMapper implements RowMapper<Product> {
 

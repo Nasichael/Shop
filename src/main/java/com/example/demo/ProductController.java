@@ -3,9 +3,8 @@ package com.example.demo;
 
 import com.example.demo.domain.Product;
 import com.example.demo.domain.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +26,6 @@ public class ProductController {
         return test;
     }
 
-
     @GetMapping("items/search/{keyword}")
     List<Product> searchByKeyword(@PathVariable("keyword") String keyword) {
         return repository.search(keyword);
@@ -38,8 +36,10 @@ public class ProductController {
         return repository.getOne(id);
     }
 
+    @ApiOperation("Retrieves all items")
     @GetMapping("items")
     List<Product> getAll() {
         return repository.getAll();
     }
-}
+
+    }

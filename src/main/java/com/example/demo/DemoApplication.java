@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.domain.Basket;
 import com.example.demo.domain.Category;
+import com.example.demo.domain.Repository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,4 +19,6 @@ public class DemoApplication {
     ApplicationRunner runAlways(){
         return args -> Category.builder().build();
     }
+
+
 }
