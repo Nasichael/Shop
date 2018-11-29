@@ -13,9 +13,7 @@ public class Product {
     private int id;
     private String name;
     private Category category;
-    private ShoeSize shoeSize;
     private ClotheSize clotheSize;
-    private Material material;
     private BigDecimal price;
     private String url;
 

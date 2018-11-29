@@ -2,7 +2,7 @@ package com.example.demo;
 
 
 import com.example.demo.domain.Product;
-import com.example.demo.domain.Repository;
+import com.example.demo.domain.ProductRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +13,10 @@ import java.util.Optional;
 public class ProductController {
 
 
-    private final Repository repository;
+    private final ProductRepository productRepository;
 
-    public ProductController(Repository repository) {
-        this.repository = repository;
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @GetMapping("test")
@@ -28,18 +28,17 @@ public class ProductController {
 
     @GetMapping("items/search/{keyword}")
     List<Product> searchByKeyword(@PathVariable("keyword") String keyword) {
-        return repository.search(keyword);
+        return productRepository.search(keyword);
     }
 
     @GetMapping("items/{id}")
     Optional<Product> getById(@PathVariable("id") int id) {
-        return repository.getOne(id);
+        return productRepository.getOne(id);
     }
 
     @ApiOperation("Retrieves all items")
     @GetMapping("items")
     List<Product> getAll() {
-        return repository.getAll();
+        return productRepository.getAll();
     }
-
-    }
+}

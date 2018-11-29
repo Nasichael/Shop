@@ -1,28 +1,33 @@
 package com.example.demo.domain;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@Data
+@Getter
+
+
 public class Basket {
 
-    private BigDecimal totalPrice = BigDecimal.valueOf(0);
-    List<Product> listOfProducts = new ArrayList<>();
+    private int basketId;
+    private Product product;
 
-
-    public List<Product> addProductToBasket(Product newProduct) {
-        listOfProducts.add(newProduct);
+       /*public List<Product> viewBasket() {
         return listOfProducts;
     }
 
-    public List<Product> viewBasket() {
-        return listOfProducts;
-    }
-
-    public BigDecimal calculateTotalPrice(List<Product> list) {
-        for (Product product : list) {
+    public BigDecimal calculateTotalPrice() {
+        for (Product product : listOfProducts) {
             totalPrice = totalPrice.add(product.getPrice());
         }
         return totalPrice;
-    }
+        }*/
+
 }
+
