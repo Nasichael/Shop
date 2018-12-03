@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,7 @@ public class BasketRepository {
         jdbcTemplate.update(sqlInsert);
     }
 
-
-
-    public void removeProductFromBasket(int product_id) {
+       public void removeProductFromBasket(int product_id) {
 
         //to samo co w addProduct
 
@@ -43,10 +42,10 @@ public class BasketRepository {
         jdbcTemplate.update(sqlDelete);
     }
 
-    public List<Product> getAllProductsByBasketId(int basketId) {
+    public List<Product> getAllProductsByBasketId(int basket_id) {
 
         final List<Map<String, Object>> query = jdbcTemplate.queryForList
-                ("SELECT basket_id, id ,name, price FROM product JOIN basket ON id = product_id WHERE basket.basket_id = " + basketId);
+                ("SELECT basket_id, id ,name, price FROM product JOIN basket ON id = product_id WHERE basket.basket_id = " + basket_id);
         return query.stream()
                 .map(row -> product(row))
                 .collect(Collectors.toList());
