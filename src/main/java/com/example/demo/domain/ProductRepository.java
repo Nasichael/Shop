@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.demo.domain.ProductMapper.product;
+
 @org.springframework.stereotype.Repository
 public class ProductRepository {
 
@@ -20,14 +22,6 @@ public class ProductRepository {
 
     public ProductRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public Product product(Map<String, Object> row) {
-        return Product.builder()
-                .id((Integer) row.get("id"))
-                .name((String) row.get("name"))
-                .price((BigDecimal) row.get("price"))
-                .build();
     }
 
     public List<Product> search(String keyWord) {
@@ -59,18 +53,7 @@ public class ProductRepository {
                 .collect(Collectors.toList());
     }
 
-    /* class ProductListMapper implements RowMapper<Product> {*/
-
-       /* @Override
-        public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-            return Product.builder()
-                    .id(rs.getInt("id"))
-                    .name(rs.getString("name"))
-                    .build();
-        }*/
-
-    List<Integer> getAllAvailableProdcutsByProductId() {
+   List<Integer> getAllAvailableProdcutsByProductId() {
 
         String sqlQueryForId = "SELECT id FROM product LEFT JOIN basket ON id = product_id WHERE basket_id is NULL ORDER BY id";
         return jdbcTemplate.queryForList(sqlQueryForId, Integer.class);

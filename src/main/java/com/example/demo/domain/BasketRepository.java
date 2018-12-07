@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.example.demo.domain.ProductMapper.product;
+
 @org.springframework.stereotype.Repository
 
 public class BasketRepository {
@@ -18,13 +20,7 @@ public class BasketRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Product product(Map<String, Object> row) {
-        return Product.builder()
-                .id((Integer) row.get("id"))
-                .name((String) row.get("name"))
-                .price((BigDecimal) row.get("price"))
-                .build();  //dlaczego tego nie widzi z ProductRepository i trzeba napisac drugi raz??
-    }
+
 
     public void addProductToBasket(int basket_id, int product_id) {
 

@@ -43,14 +43,14 @@ public class BasketRepositoryTest {
         //given
         final int product_id = 3;
         final int basket_id = 1;
-        final int NUMBER_OF_ROWS = 3;
+        final int numberOfProducts = 3;
 
         //when
         basketRepository.addProductToBasket(basket_id, product_id);
         final List<Product> allProductsByBasketId = basketRepository.getAllProductsByBasketId(basket_id);
 
         //then
-        assertThat(allProductsByBasketId.size()).isEqualTo(NUMBER_OF_ROWS);
+        assertThat(allProductsByBasketId.size()).isEqualTo(numberOfProducts);
     }
 
 
@@ -60,14 +60,14 @@ public class BasketRepositoryTest {
         //given
         final int product_id = 3;
         final int basket_id = 1;
-        final int NUMBER_OF_ROWS = 2;
+        final int numberOfProducts = 2;
 
         //when
         basketRepository.removeProductFromBasket(product_id);
         final List<Product> allProductsByBasketId = basketRepository.getAllProductsByBasketId(basket_id);
 
         //then
-        assertThat(allProductsByBasketId.size()).isEqualTo(NUMBER_OF_ROWS);
+        assertThat(allProductsByBasketId.size()).isEqualTo(numberOfProducts);
     }
 
 
@@ -76,14 +76,14 @@ public class BasketRepositoryTest {
 
         //given
         final int basket_id = 1;
-        final int TOTAL_PRICE = 500;
+        final BigDecimal TOTAL_PRICE = BigDecimal.valueOf(500);
 
         //when
         basketRepository.calculateTotalPriceByBasketId(basket_id);
         BigDecimal totalPrice = basketRepository.calculateTotalPriceByBasketId(basket_id);
 
         //then
-        assertThat(totalPrice).isEqualTo(BigDecimal.valueOf(TOTAL_PRICE));
+        assertThat(totalPrice).isEqualTo(TOTAL_PRICE);
     }
 }
 

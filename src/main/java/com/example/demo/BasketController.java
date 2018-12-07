@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.domain.BasketRepository;
 import com.example.demo.domain.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -19,12 +20,12 @@ public class BasketController {
 
 
     @GetMapping("basket/{id}")
-    List<Product> getAllProductsByBasketId(@PathVariable("id") int id) {
+    public List<Product> getAllProductsByBasketId(@PathVariable("id") int id) {
         return basketRepository.getAllProductsByBasketId(id);
     }
 
     @GetMapping("basket/{id}/total")
-    BigDecimal calculateTotalPriceByBasketId(@PathVariable("id") int id) {
+    public BigDecimal calculateTotalPriceByBasketId(@PathVariable("id") int id) {
         return basketRepository.calculateTotalPriceByBasketId(id);
     }
 
@@ -38,5 +39,14 @@ public class BasketController {
         basketRepository.addProductToBasket(basket_id, product_id);
     }
 
-  }
+    @PostMapping(value = "basket/{basket_id}/add/{product_id}")
+    public ResponseEntity addProductToBasket2(@PathVariable int basket_id, @PathVariable int product_id) {
+        try {
+            basketRepository.addProductToBasket(basket_id, product_id);
+        } catch (UnavailableProductException re) {
+            return ResponseEntity.badRequest().body("Provided product id does not exist");
+        }
+        return ResponseEntity.ok("");
+    }
+}
 
