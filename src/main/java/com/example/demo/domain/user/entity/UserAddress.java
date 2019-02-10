@@ -2,10 +2,7 @@ package com.example.demo.domain.user.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -14,4 +11,8 @@ public class UserAddress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String street;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 }

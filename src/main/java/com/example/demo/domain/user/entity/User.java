@@ -3,6 +3,7 @@ package com.example.demo.domain.user.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Data
@@ -14,4 +15,7 @@ public class User {
     private int id;
 
     private String name;
+
+    @OneToMany(mappedBy="user")
+    List<UserAddress> addresses;
 }

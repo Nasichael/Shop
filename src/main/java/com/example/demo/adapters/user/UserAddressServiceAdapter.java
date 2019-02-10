@@ -2,7 +2,9 @@ package com.example.demo.adapters.user;
 
 import com.example.demo.domain.user.AddressRepository;
 import com.example.demo.domain.user.UserAddressService;
+import com.example.demo.domain.user.UserRepository;
 import com.example.demo.domain.user.dto.UserAddressDto;
+import com.example.demo.domain.user.entity.User;
 import com.example.demo.domain.user.entity.UserAddress;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ import static com.example.demo.adapters.user.UserAddressMapper.toDto;
 public class UserAddressServiceAdapter implements UserAddressService {
 
     private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
 
-    public UserAddressServiceAdapter(AddressRepository addressRepository) {
+    public UserAddressServiceAdapter(AddressRepository addressRepository, UserRepository userRepository) {
         this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class UserAddressServiceAdapter implements UserAddressService {
 
     @Override
     public List<UserAddressDto> findByUser(int userId) {
-        return null;
+        return addressRepository.findByUserId(userId);
     }
 
     @Override
@@ -37,9 +41,12 @@ public class UserAddressServiceAdapter implements UserAddressService {
     }
 
     @Override
-    public void save(UserAddressDto userAddressDto) {
+    public UserAddressDto save(int userId, UserAddressDto userAddressDto) {
         UserAddress userAddress = UserAddressMapper.toEntity (userAddressDto);
-        addressRepository.save (userAddress);
+        final Optional<User> byId = userRepository.findById (userId);
+        User user = byId.orElseThrow (() -> new RuntimeException ("Given User does not exist"));
+        userAddress.setUser (user);
+        return UserAddressMapper.toDto (addressRepository.save (userAddress));
     }
 
     @Override

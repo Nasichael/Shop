@@ -13,7 +13,7 @@ public interface UserAddressService {
 
     void deleteById(int id);
 
-    void save(UserAddressDto userAddress);
+    UserAddressDto save(int userId, UserAddressDto userAddress);
 
     UserAddressDto update(int id, UserAddressDto userAddress);
 

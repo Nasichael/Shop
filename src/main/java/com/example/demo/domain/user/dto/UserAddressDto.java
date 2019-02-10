@@ -8,5 +8,6 @@ import lombok.Value;
 public class UserAddressDto {
 
     private int id;
+    private int userId;
     private String street;
 }

@@ -1,7 +1,6 @@
 package com.example.demo.domain.user;
 
 import com.example.demo.domain.user.dto.UserAddressDto;
-import com.example.demo.domain.user.entity.UserAddress;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +25,8 @@ public class UserAddressController {
         return userAddressService.findById (id);
     }
 
-    @GetMapping("users/{userId}/addresses}")
-    public List<UserAddressDto> findForUser(@PathVariable("id") int userId) {
+    @GetMapping(value = "users/{userId}/addresses")
+    public List<UserAddressDto> findForUser(@PathVariable("userId") int userId) {
         return userAddressService.findByUser (userId);
     }
 
@@ -37,12 +36,10 @@ public class UserAddressController {
         userAddressService.deleteById (id);
     }
 
-    @PostMapping(value = "addresses")
-    public void add(@RequestBody UserAddressDto userAddress) {
-        userAddressService.save (userAddress);
+    @PostMapping(value = "users/{userId}/addresses")
+    public UserAddressDto add(@PathVariable int userId, @RequestBody UserAddressDto userAddress) {
+        return userAddressService.save (userId, userAddress);
     }
-
-
 
 
     @PutMapping(value = "addresses/{id}")

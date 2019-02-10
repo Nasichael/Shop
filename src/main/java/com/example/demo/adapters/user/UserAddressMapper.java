@@ -8,6 +8,7 @@ public class UserAddressMapper {
         return UserAddressDto.builder ()
                 .id (from.getId ())
                 .street (from.getStreet ())
+                .userId (from.getUser ().getId ())
                 .build ();
     }
 
