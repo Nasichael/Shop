@@ -1,12 +1,16 @@
 package com.example.demo.adapters.user;
 
 import com.example.demo.domain.user.AddressRepository;
-import com.example.demo.domain.user.UserAddress;
 import com.example.demo.domain.user.UserAddressService;
+import com.example.demo.domain.user.dto.UserAddressDto;
+import com.example.demo.domain.user.entity.UserAddress;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.example.demo.adapters.user.UserAddressMapper.toDto;
 
 @Service
 public class UserAddressServiceAdapter implements UserAddressService {
@@ -18,12 +22,12 @@ public class UserAddressServiceAdapter implements UserAddressService {
     }
 
     @Override
-    public Optional<UserAddress> findById(int id) {
-        return addressRepository.findById (id);
+    public Optional<UserAddressDto> findById(int id) {
+        return addressRepository.findById (id).map (UserAddressMapper::toDto);
     }
 
     @Override
-    public List<UserAddress> findByUser(int userId) {
+    public List<UserAddressDto> findByUser(int userId) {
         return null;
     }
 
@@ -33,24 +37,32 @@ public class UserAddressServiceAdapter implements UserAddressService {
     }
 
     @Override
-    public void save(UserAddress userAddress) {
+    public void save(UserAddressDto userAddressDto) {
+        UserAddress userAddress = UserAddressMapper.toEntity (userAddressDto);
         addressRepository.save (userAddress);
     }
 
     @Override
-    public UserAddress update(int id, UserAddress userAddress) {
+    public UserAddressDto update(int id, UserAddressDto userAddress) {
         final Optional<UserAddress> oldAddress = addressRepository.findById (id);
         final UserAddress userAddress1 = oldAddress
                 .map (a -> copyFields (a, userAddress))
-
-                .orElseThrow (()-> new RuntimeException ("no entity found"));
+                .orElseThrow (() -> new RuntimeException ("no entity found"));
         final UserAddress save = addressRepository.save (userAddress1);
-        return save;
+        return toDto (save);
     }
 
-    private UserAddress copyFields(UserAddress a, UserAddress userAddress) {
-          a.setStreet (userAddress.getStreet ());
-          return a;
+    @Override
+    public List<UserAddressDto> findAll() {
+        return addressRepository.findAll ()
+                .stream ()
+                .map (UserAddressMapper::toDto)
+                .collect (Collectors.toList ());
+    }
+
+    private UserAddress copyFields(UserAddress original, UserAddressDto newAddress) {
+        original.setStreet (newAddress.getStreet ());
+        return original;
 
     }
 }
