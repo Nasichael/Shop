@@ -24,14 +24,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostgresProductsRepositoryTest {
 
     @Autowired
-    PostgresProductsRepository repository;
+  //  PostgresProductsRepository repository;
 
     @Test
     public void shouldGetOneProduct()
     {
-        final Optional<Product> product = repository.find (1);
-
-        assertThat(product).isNotNull ().isNotEmpty ();
     }
 
 }
