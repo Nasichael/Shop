@@ -32,7 +32,9 @@ public class UserAddressServiceAdapter implements UserAddressService {
 
     @Override
     public List<UserAddressDto> findByUser(int userId) {
-        return addressRepository.findByUserId(userId);
+        return addressRepository.findByUserId (userId).stream ()
+                .map (UserAddressMapper::toDto)
+                .collect (Collectors.toList ());
     }
 
     @Override
